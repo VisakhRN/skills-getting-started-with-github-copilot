@@ -1,6 +1,7 @@
 """
 High School Management System API
 
+
 A super simple FastAPI application that allows students to view and sign up
 for extracurricular activities at Mergington High School.
 """
@@ -54,6 +55,10 @@ def get_activities():
 
 @app.post("/activities/{activity_name}/signup")
 def signup_for_activity(activity_name: str, email: str):
+    # Validate student is not already signed up
+    if activity_name in activities and email in activities[activity_name]["participants"]:
+        raise HTTPException(status_code=400, detail="Student is already signed up for this activity")
+
     """Sign up a student for an activity"""
     # Validate activity exists
     if activity_name not in activities:
